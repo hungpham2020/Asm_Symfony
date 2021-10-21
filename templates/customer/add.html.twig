@@ -1,0 +1,63 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+   <div class="container-fluid mt-3">
+        <h2 class="text-center mt-2">Add Customer</h2>
+        <div class="col-md-6">
+            {{form_start (form)}}
+                <div class="form-group">
+                    {{ form_label (form.name)}}
+                    {{ form_widget (form.name,
+                    {
+                        'attr' : {'class' : 'form-control'}
+                    })}}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label (form.age)}}
+                    {{ form_widget (form.age,
+                    {
+                        'attr' : {'class' : 'form-control'}
+                    })}}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label (form.phoneNumber)}}
+                    {{ form_widget (form.phoneNumber,
+                    {
+                        'attr' : {'class' : 'form-control'}
+                    })}}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label (form.address)}}
+                    {{ form_widget (form.address,
+                    {
+                        'attr' : {'class' : 'form-control'}
+                    })}}
+                </div>
+
+                {# <div class="form-group">
+                    {{ form_label (form.product)}}
+                    {{ form_widget (form.product,
+                    {
+                        'attr' : {'class' : 'form-control'}
+                    })}}
+                </div> #}
+
+                <div class="form-group">
+                    {{ form_label (form.avatar)}}
+                    {{ form_widget (form.avatar,
+                    {
+                        'attr' : {'class' : 'form-control'}
+                    })}}
+                </div>
+
+                
+                <div class="form-group mt-3">
+                    <input type="submit" class="btn btn-success" value="Add">
+                </div>
+            {{form_end (form)}}
+        </div>
+    </div> 
+{% endblock %}
