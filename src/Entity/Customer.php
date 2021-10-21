@@ -30,12 +30,12 @@ class Customer
     private $age;
 
     /**
-     * @ORM\Column(type="string", length=15)
+     * @ORM\Column(type="string", length=20)
      */
     private $phoneNumber;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $address;
 
@@ -45,7 +45,7 @@ class Customer
     private $avatar;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Product::class, inversedBy="customers")
+     * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="customers")
      */
     private $products;
 
@@ -100,7 +100,7 @@ class Customer
         return $this->address;
     }
 
-    public function setAddress(string $address): self
+    public function setAddress(?string $address): self
     {
         $this->address = $address;
 
@@ -131,6 +131,7 @@ class Customer
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
+            $product->addCustomer($this);
         }
 
         return $this;
@@ -138,7 +139,9 @@ class Customer
 
     public function removeProduct(Product $product): self
     {
-        $this->products->removeElement($product);
+        if ($this->products->removeElement($product)) {
+            $product->removeCustomer($this);
+        }
 
         return $this;
     }

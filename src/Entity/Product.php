@@ -25,7 +25,7 @@ class Product
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $description;
 
@@ -40,7 +40,7 @@ class Product
     private $price;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $img;
 
@@ -50,7 +50,7 @@ class Product
     private $category;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Customer::class, mappedBy="products")
+     * @ORM\ManyToMany(targetEntity=Customer::class, inversedBy="products")
      */
     private $customers;
 
@@ -81,7 +81,7 @@ class Product
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -117,7 +117,7 @@ class Product
         return $this->img;
     }
 
-    public function setImg(?string $img): self
+    public function setImg(string $img): self
     {
         $this->img = $img;
 
@@ -148,7 +148,6 @@ class Product
     {
         if (!$this->customers->contains($customer)) {
             $this->customers[] = $customer;
-            $customer->addProduct($this);
         }
 
         return $this;
@@ -156,9 +155,7 @@ class Product
 
     public function removeCustomer(Customer $customer): self
     {
-        if ($this->customers->removeElement($customer)) {
-            $customer->removeProduct($this);
-        }
+        $this->customers->removeElement($customer);
 
         return $this;
     }
