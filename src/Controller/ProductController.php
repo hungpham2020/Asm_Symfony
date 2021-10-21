@@ -56,17 +56,17 @@ class ProductController extends AbstractController
     public function add(Request $request): Response
     {
        $product = new Product();
-       $form = $this->createForm(ProductType::class, $product);
+       $form = $this->createForm(ProductType::class,$product);
        $form->handleRequest($request);
        
        if ($form->isSubmitted() && $form->isValid()) { 
            $img = $product->getImg();
            $imgName = uniqid();
-           $imgExtension =$img ->guessExtension();
+           $imgExtension =$img->guessExtension();
            $imageName = $imgName.".".$imgExtension;
 
            try{
-               $img -> move($this->getParameter('Image'),$imageName);
+               $img->move($this->getParameter('product_img'), $imageName);
            }
            catch(FileException $e)
            {
@@ -98,7 +98,7 @@ class ProductController extends AbstractController
           if($file !=null){
               $img = $product->getImg();
               $imgName = uniqid();
-              $imgExtension = $img -> guessExtention();
+              $imgExtension = $img->guessExtension();
               $imageName = $imgName.".".$imgExtension;
 
               try{

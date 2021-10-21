@@ -86,6 +86,11 @@ class Category
         return $this;
     }
 
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     public function removeProduct(Product $product): self
     {
         if ($this->products->removeElement($product)) {

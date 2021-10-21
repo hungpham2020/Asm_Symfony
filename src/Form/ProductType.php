@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -44,14 +45,14 @@ class ProductType extends AbstractType
                 'data_class' => null,
                 'required' =>is_null($builder ->getData()->getImg())
             ])
-            // ->add('category', EntityType::class,
-            // [
-            //     'label'=>"Category",
-            //     'class'=> null,
-            //     'choice_label'=>"name",
-            //     'multiple' => false,
-            //     'expanded' => false
-            // ])
+            ->add('category', EntityType::class,
+            [
+                'label' =>"Category",
+                'class'=> Category::class,
+                'choice_label'=>"name",
+                'multiple' => false,
+                'expanded' => false
+            ])
             // ->add('customers', EntityType::class,
             // [
             //     'label'=>"Customer",
