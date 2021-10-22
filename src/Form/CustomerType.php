@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Customer;
+use App\Entity\Product;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -41,8 +43,14 @@ class CustomerType extends AbstractType
                 'data_class' => null,
                 'required' => is_null($builder->getData()->getAvatar())
             ])
-            //->add('products')
-        ;
+            ->add('products', EntityType::class,
+            [
+                'label' => 'Product Name',
+                'class' => Product::class,
+                'choice_label' => "name",
+                'multiple' =>true,
+                'expanded' => false
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

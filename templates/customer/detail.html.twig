@@ -14,6 +14,12 @@
             <li class="list-group-item">Name: {{cus.age}}</li>
             <li class="list-group-item"> Phone: {{cus.phoneNumber}}</li>
             <li class="list-group-item">Address: {{cus.address}}</li>
+            <li class="list-group-item">Products:
+            {% for a in cus.products %}
+                <a href="{{path('detail', {'id': a.id})}}">{{a.name}}</a>
+                <br>
+            {% endfor %}
+            </li>
         </ul>
         <div class="card-body text-right">
             <a type="button" class="btn btn-success btn-sm" href="{{path ('customer_edit', {'id': cus.id})}}">Edit</a>
