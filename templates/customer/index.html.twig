@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Customer List{% endblock %}
+{% block javascripts %}
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+            <script>
+            $(document).ready(function(){
+            $("#search").on("keyup", function() {
+                    var value = $(this).val().toLowerCase();
+                    $("#table tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+        </script>
+        {% endblock %}
+{% block body %}
+    <div class="container">
+    <h1 class="display-4 text-center">Customer List</h1>
+    {# <input id="search" type="text" placeholder="Search.."> #}
+    {# <a href="{{path ('customer_sort_title_asc')}}" class="btn btn-sm btn-outline-info">Sort by name</a>
+    <a href="{{path ('customer_sort_title_dasc')}}" class="btn btn-sm btn-outline-info">sort reverse name</a> #}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Name</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody id="table">
+                {% for cus in cuses %}
+                    <tr>
+                        <td>{{cus.id}}</td>
+                        <td>{{cus.name}}</td>
+                        <td>
+                            <a href="{{path ('customer_detail', {'id': cus.id})}}" class="btn btn-sm btn-primary">View</a>
+                        </td>
+                        <td><a href="{{path ('customer_edit', {'id': cus.id})}}" class="btn btn-sm btn-success">Edit</a></td>
+                        <td><a href="{{path ('customer_delete', {'id': cus.id})}}" class="btn btn-sm btn-danger"
+                            onclick = "return confirm('Are you really want to delete this Customer?')">Delete</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
