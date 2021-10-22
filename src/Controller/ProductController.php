@@ -46,7 +46,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/add', name: 'add')]
-    public function add(Request $request): Response
+    public function add(Request $request)
     {
        $product = new Product();
        $form = $this->createForm(Product::class,$product);
