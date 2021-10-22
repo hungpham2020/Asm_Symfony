@@ -5,10 +5,10 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Form\ProductType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 use function PHPUnit\Framework\throwException;
 
@@ -115,7 +115,7 @@ class ProductController extends AbstractController
           $manager-> persist($product);
           $manager-> flush();
 
-          $this ->addFlash('Success',"Add new magazine success!");
+          $this ->addFlash('Success',"Edit product success!");
           return $this ->redirectToRoute('index');
       }
       return $this ->render("product/edit.html.twig",["form"=> $form->createView()]);
