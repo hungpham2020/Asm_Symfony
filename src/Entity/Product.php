@@ -54,9 +54,30 @@ class Product
      */
     private $customers;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Manufacture::class, inversedBy="product")
+     */
+    private $manufacture;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Cart::class, inversedBy="products")
+     */
+    private $cart;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Cart::class, mappedBy="product")
+     */
+    private $carts;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Cart::class, inversedBy="product")
+     */
     public function __construct()
     {
         $this->customers = new ArrayCollection();
+        $this->carts = new ArrayCollection();
+        $this->orderItems = new ArrayCollection();
+        $this->cart = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +181,45 @@ class Product
     {
         if ($this->customers->removeElement($customer)) {
             $customer->removeProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function getManufacture(): ?Manufacture
+    {
+        return $this->manufacture;
+    }
+
+    public function setManufacture(?Manufacture $manufacture): self
+    {
+        $this->manufacture = $manufacture;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Cart[]
+     */
+    public function getCarts(): Collection
+    {
+        return $this->carts;
+    }
+
+    public function addCart(Cart $cart): self
+    {
+        if (!$this->carts->contains($cart)) {
+            $this->carts[] = $cart;
+            $cart->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCart(Cart $cart): self
+    {
+        if ($this->carts->removeElement($cart)) {
+            $cart->removeProduct($this);
         }
 
         return $this;

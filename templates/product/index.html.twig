@@ -1,5 +1,7 @@
 {% extends "base.html.twig" %}
 {% block body %}
+<h2 class="display-4 text-center mb-3">Products List</h2>
+
 <table class="table table-striped text-center">
 <thead>
         <tr>
@@ -8,7 +10,9 @@
                 <th>Image</th>
                 <th>Price</th>
                 <th>Quantity</th>
-                
+                {% if is_granted('ROLE_ADMIN') %}
+                <th></th>
+                {% endif %}
         </tr>
 </thead>
 
@@ -20,7 +24,13 @@
         <td>{{product.price}}</td>
         <td>{{product.quantity}}</td>
         <td>
-         <a href="{{path('detail',{'id':product.id})}}" class="btn btn-primary">Details</a>
+            <a href="{{path('cart_add',{'id':product.id})}}" class="btn btn-outline-success">Add to Cart</a>
+            <a href="{{path('detail',{'id':product.id})}}" class="btn btn-primary">Details</a>
+            {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{path('edit',{'id':product.id})}}" class="btn btn-primary">Edit</a>
+            <a href="{{path('delete',{'id':product.id})}}" class="btn btn-warning"
+            onclick="return confirm('Are you sure to delete!')">Delete</a>
+            {% endif %}
         </td>
     </tr>
 {% endfor %}

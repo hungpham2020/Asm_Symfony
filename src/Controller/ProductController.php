@@ -3,11 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Form\ProductType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+use function PHPUnit\Framework\throwException;
+/**
+ * @IsGranted("ROLE_USER")
+ */
 class ProductController extends AbstractController
 {
     #[Route('/product', name: 'index')]
@@ -29,7 +36,9 @@ class ProductController extends AbstractController
            return $this->render('product/detail.html.twig', ['product'=>$product]);
        }
     }
-    
+    /**
+    * @IsGranted("ROLE_ADMIN")
+    */
     #[Route('/product/delete/{id}', name: 'delete')]
     public function delete($id): Response
     {
@@ -39,29 +48,85 @@ class ProductController extends AbstractController
         }
         else{
             $manager = $this->getDoctrine()->getManager();
-            $manager->remove($id);
-            $this->addFlash('Error','Delete successfully');
+            $manager->remove($product);
+            $manager->flush();
+            $this->addFlash('Success','Delete successfully!');
         }
         return $this->redirectToRoute('index');
     }
 
+
+    /**
+    * @IsGranted("ROLE_ADMIN")
+    */
     #[Route('/product/add', name: 'add')]
-    public function add(Request $request)
+    public function add(Request $request): Response
     {
        $product = new Product();
-       $form = $this->createForm(Product::class,$product);
-       $this->$form->handleRequest($request);
+       $form = $this->createForm(ProductType::class,$product);
+       $form->handleRequest($request);
        
        if ($form->isSubmitted() && $form->isValid()) { 
-           
+           $img = $product->getImg();
+           $imgName = uniqid();
+           $imgExtension =$img->guessExtension();
+           $imageName = $imgName.".".$imgExtension;
+
+           try{
+               $img->move($this->getParameter('product_img'), $imageName);
+           }
+           catch(FileException $e)
+           {
+                throwException($e);
+           }
+
+           $product ->setImg($imageName);
+
+           $manager = $this->getDoctrine()->getManager();
+           $manager->persist($product);
+           $manager->flush();
+
+           $this->addFlash('Success',"Add success product!");
+           return $this->redirectToRoute('index');
        }
+       return $this->render("product/add.html.twig",["form" => $form->createView()]);
     }
 
+
+    /**
+    * @IsGranted("ROLE_ADMIN")
+    */
     #[Route('/product/edit/{id}', name: 'edit')]
-    public function edit(): Response
+    public function edit(Request $request, $id): Response
     {
-        return $this->render('product/index.html.twig', [
-            'controller_name' => 'ProductController',
-        ]);
+      $product = $this->getDoctrine()->getRepository(Product::class)->find($id);
+      $form =$this->createForm(ProductType::class, $product);
+      $form->handleRequest($request);
+      if($form->isSubmitted() && $form->isValid()){
+          $file = $form['img']->getData();
+          if($file !=null){
+              $img = $product->getImg();
+              $imgName = uniqid();
+              $imgExtension = $img->guessExtension();
+              $imageName = $imgName.".".$imgExtension;
+
+              try{
+                  $img -> move($this -> getParameter('product_img'),$imageName);
+              }
+              catch(FileException $e)
+              {
+                    throwException($e);
+              }
+              $product -> setImg($imageName);
+          }
+
+          $manager = $this->getDoctrine()->getManager();
+          $manager-> persist($product);
+          $manager-> flush();
+
+          $this ->addFlash('Success',"Edit product success!");
+          return $this ->redirectToRoute('index');
+      }
+      return $this ->render("product/edit.html.twig",["form"=> $form->createView()]);
     }
 }

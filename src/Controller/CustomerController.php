@@ -9,11 +9,15 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use function PHPUnit\Framework\throwException;
-
+/**
+ * @IsGranted("ROLE_ADMIN")
+ */
 class CustomerController extends AbstractController
 {
+    
     #[Route('/customer', name: 'customer_index')]
     public function customerIndex(): Response
     {
