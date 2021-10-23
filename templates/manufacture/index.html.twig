@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+{% block body %}
+<h1 class="display-4 text-center mb-3">Manufacture</h1>
+<table class="table table-striped text-center">
+<thead>
+        <tr>
+
+                <th>Name</th>
+                <th></th>
+                
+        </tr>
+</thead>
+
+<tbody>
+{% for  manufacture in manufactures %}
+    <tr>
+        <td>{{manufacture.name}}</td>
+        <td>
+         <a href="{{path('manufacture_detail',{'id':manufacture.id})}}" class="btn btn-primary">Details</a>
+        </td>
+    </tr>
+{% endfor %}
+</tbody>
+
+</table>
+{% endblock %}

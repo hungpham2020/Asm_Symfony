@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CartController!{% endblock %}
+
+{% block body %}
+<h1 class="display-4 text-center">Shopping Cart</h1>
+<table class="table table-striped text-center">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Product</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ca in cart %}
+            {% for pro in ca.product %}
+                <tr>
+                    <td>{{pro.id}}</td>
+                    <td><a href="{{path('detail', {'id': pro.id})}}">{{pro.name}}</a></td>
+                    <td><img src="{{asset('image/'~pro.img)}}" alt="" width="120" height="100"></td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
